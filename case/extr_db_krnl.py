@@ -24,12 +24,25 @@ from ctypes.wintypes import *
 
 def mount_db_file():
     dll = windll.LoadLibrary(r'../x64/extr_db_krnl.dll')       # 载入按stdcall调用协议调用其中的函数
-    db_name = c_wchar_p(r'C:\\Users\\XLY_LR\\PycharmProjects\\dll_test\\data\\debug\\score.ibd')
+    db_name = r'C:\\Users\\XLY_LR\\PycharmProjects\\dll_test\\data\\debug\\score.ibd'
     db_type = 0x0A01
     err = c_ulong()
     dll.extr_db_fun_A.argtypes = [c_wchar_p, DWORD, POINTER(DWORD)]
     dll.extr_db_fun_A.restype = HANDLE
-    db_fh = dll.extr_db_fun_A(db_name, db_type, byref(err))    # id()函数用于获取对象的内存地址
+    db_fh = dll.extr_db_fun_A(db_name, db_type, byref(err))    # byref()函数用于获取对象的内存地址，db_fh是<class 'int'>
+
+    # dll = cdll.LoadLibrary(r'..\x64\extr_db_krnl.dll')  # 载入按标准的cdecl调用协议导出的函数
+    # db_name = c_wchar_p(r'..\data\debug\score.ibd')
+    # db_type = DWORD(0x0A01)
+    # err = c_ulong()
+    # db_fh = HANDLE(dll.extr_db_fun_A(db_name, db_type, byref(err)))    # byref()函数用于获取对象的内存地址，db_fh是<class 'ctypes.c_void_p'>
+
+    # dll = cdll.LoadLibrary(r'..\x64\extr_db_krnl.dll')  # 载入按标准的cdecl调用协议导出的函数
+    # db_name = r'..\data\debug\score.ibd'
+    # db_type = 0x0A01
+    # err = c_ulong()
+    # db_fh = HANDLE(dll.extr_db_fun_A(db_name, db_type, byref(err)))    # id()函数用于获取对象的内存地址，db_fh是<class 'ctypes.c_void_p'>
+
     print(err)
     print('HANDLE =', db_fh)
     print(type(db_fh))
